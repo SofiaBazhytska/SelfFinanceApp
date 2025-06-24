@@ -1,0 +1,108 @@
+﻿@page "/PeriodReport"
+@using SelfFinance.Shared.Dtos.ReportDtos
+@inject HttpClient Http
+
+<h3>Period Report</h3>
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label for="startDateInput" class="form-label">Start Date:</label>
+        <InputDate @bind-Value="startDate" class="form-control" id="startDateInput" />
+    </div>
+    <div class="col-md-4">
+        <label for="endDateInput" class="form-label">End Date:</label>
+        <InputDate @bind-Value="endDate" class="form-control" id="endDateInput" />
+    </div>
+</div>
+
+<button class="btn btn-primary mb-3" @onclick="LoadReport">Load Report</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+
+@if (isLoading)
+{
+    <p><em>Loading report...</em></p>
+}
+else if (report != null)
+{
+    <div class="mb-3">
+        <p><strong>Period:</strong> @report.StartDate.ToShortDateString() - @report.EndDate.ToShortDateString()</p>
+        <p><strong>Total Income:</strong> @report.TotalIncome.ToString("C")</p>
+        <p><strong>Total Expenses:</strong> @report.TotalExpenses.ToString("C")</p>
+    </div>
+
+    <h5>Operations</h5>
+    @if (report.Operations == null || !report.Operations.Any())
+    {
+        <p>No operations found for this period.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var op in report.Operations)
+                {
+                    <tr>
+                        <td>@op.Date.ToShortDateString()</td>
+                        <td>@op.Amount.ToString("C")</td>
+                        <td>@op.CategoryName</td>
+                        <td>@op.TypeName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+else
+{
+    <p>Select start and end dates and click "Load Report" to view period report.</p>
+}
+
+@code {
+    private DateOnly startDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-7));
+    private DateOnly endDate = DateOnly.FromDateTime(DateTime.Today);
+    private DisplayPeriodReportDto report;
+    private bool isLoading = false;
+    private string errorMessage;
+
+    private async Task LoadReport()
+    {
+        errorMessage = null;
+
+        if (startDate > endDate)
+        {
+            errorMessage = "Start date cannot be later than end date.";
+            return;
+        }
+
+        isLoading = true;
+        report = null;
+
+        try
+        {
+            var url = $"api/reports/period?startDate={startDate:yyyy-MM-dd}&endDate={endDate:yyyy-MM-dd}";
+            report = await Http.GetFromJsonAsync<DisplayPeriodReportDto>(url);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading period report: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
