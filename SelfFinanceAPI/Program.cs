@@ -36,7 +36,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://localhost:7196")
+        policy.WithOrigins("https://selffinance-web-bhbgajeugsfueuar.polandcentral-01.azurewebsites.net")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
