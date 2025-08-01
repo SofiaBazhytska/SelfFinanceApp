@@ -8,6 +8,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 
 builder.Services.AddScoped(sp =>
-    new HttpClient { BaseAddress = new Uri("https://selffinance-api-hmbcdmczfse7ahbh.polandcentral-01.azurewebsites.net/") });
+    new HttpClient { BaseAddress = new Uri("https://selffinance-api-hmbcdmczfse7ahbh.polandcentral-01.azurewebsites.net") });
 
 await builder.Build().RunAsync();
