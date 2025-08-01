@@ -34,7 +34,7 @@ else
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowSelfFinanceWeb", policy =>
     {
         policy.WithOrigins("https://selffinance-web-bhbgajeugsfueuar.polandcentral-01.azurewebsites.net")
               .AllowAnyHeader()
@@ -57,7 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors();
+app.UseCors("AllowSelfFinanceWeb");
 
 app.UseHttpsRedirection();
 
