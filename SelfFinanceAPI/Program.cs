@@ -59,8 +59,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowSelfFinanceWeb");
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
