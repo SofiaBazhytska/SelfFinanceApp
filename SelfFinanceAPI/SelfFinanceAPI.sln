@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFinanceWeb", "..\SelfFi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFinance.Shared", "..\SelfFinance.Shared\SelfFinance.Shared.csproj", "{0A626BEF-C82A-47D3-8414-B52BD18EAE24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFinanceAPITests", "..\..\task-11-webapi\SelfFinanceAPITests\SelfFinanceAPITests.csproj", "{95C87410-F4F1-B9B0-3826-BCDC49DF5728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFinance.Core", "..\SelfFinance.Core\SelfFinance.Core.csproj", "{3ADF0217-E1B6-3DBE-C478-4DA0056A2AE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{0A626BEF-C82A-47D3-8414-B52BD18EAE24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A626BEF-C82A-47D3-8414-B52BD18EAE24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A626BEF-C82A-47D3-8414-B52BD18EAE24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95C87410-F4F1-B9B0-3826-BCDC49DF5728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95C87410-F4F1-B9B0-3826-BCDC49DF5728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95C87410-F4F1-B9B0-3826-BCDC49DF5728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95C87410-F4F1-B9B0-3826-BCDC49DF5728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ADF0217-E1B6-3DBE-C478-4DA0056A2AE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ADF0217-E1B6-3DBE-C478-4DA0056A2AE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ADF0217-E1B6-3DBE-C478-4DA0056A2AE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ADF0217-E1B6-3DBE-C478-4DA0056A2AE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
