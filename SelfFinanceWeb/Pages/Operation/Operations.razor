@@ -1,4 +1,6 @@
 ﻿@page "/Operations"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @using SelfFinance.Shared.Dtos.OperationDtos;
 @inject HttpClient Http
 @inject NavigationManager Navigation

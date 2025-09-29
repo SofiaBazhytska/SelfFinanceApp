@@ -1,4 +1,6 @@
 ﻿@page "/EditOperation/{Id:int}"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @using SelfFinance.Shared.Dtos.OperationDtos;
 @using SelfFinance.Shared.Dtos.CategoryDtos;
 @inject HttpClient Http

@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SelfFinance.Core.Models;
 using SelfFinance.Shared.Dtos.CategoryDtos;
 using SelfFinanceAPI.Mappers;
 using SelfFinance.Core.Services;
 using SelfFinance.Core.Exceptions;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SelfFinanceAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/categories")]
     public class CategoryController : Controller

@@ -1,4 +1,6 @@
 ﻿@page "/DailyReport"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @using SelfFinance.Shared.Dtos.ReportDtos
 @inject HttpClient Http
 

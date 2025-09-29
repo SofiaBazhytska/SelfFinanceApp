@@ -9,6 +9,7 @@ namespace SelfFinance.Core.Data
         private readonly IHostEnvironment _env;
         public DbSet<Operation> Operations { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public SelfFinanceAPIContext(DbContextOptions<SelfFinanceAPIContext> options, IHostEnvironment env) : base(options) 
         {
