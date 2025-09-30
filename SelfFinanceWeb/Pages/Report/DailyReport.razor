@@ -1,0 +1,94 @@
+﻿@page "/DailyReport"
+@using SelfFinance.Shared.Dtos.ReportDtos
+@inject HttpClient Http
+
+<h3>Daily Report</h3>
+
+<div class="mb-3">
+    <label for="dateInput" class="form-label">Select Date:</label>
+    <InputDate @bind-Value="selectedDate" class="form-control" id="dateInput" />
+</div>
+
+<button class="btn btn-primary mb-3" @onclick="LoadReport">Load Report</button>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+
+@if (isLoading)
+{
+    <p><em>Loading report...</em></p>
+}
+else if (report != null)
+{
+    <div class="mb-3">
+        <p><strong>Date:</strong> @report.Date.ToShortDateString()</p>
+        <p><strong>Total Income:</strong> @report.TotalIncome.ToString("C")</p>
+        <p><strong>Total Expenses:</strong> @report.TotalExpenses.ToString("C")</p>
+    </div>
+
+    <h5>Operations</h5>
+    @if (report.Operations == null || !report.Operations.Any())
+    {
+        <p>No operations found for this date.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var op in report.Operations)
+                {
+                    <tr>
+                        <td>@op.Date.ToShortDateString()</td>
+                        <td>@op.Amount.ToString("C")</td>
+                        <td>@op.CategoryName</td>
+                        <td>@op.TypeName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+else
+{
+    <p>Select a date and click "Load Report" to view daily report.</p>
+}
+
+@code {
+    private DateOnly selectedDate = DateOnly.FromDateTime(DateTime.Today);
+    private DisplayDailyReportDto report;
+    private bool isLoading = false;
+    private string errorMessage;
+
+    private async Task LoadReport()
+    {
+        isLoading = true;
+        report = null;
+        errorMessage = null;
+
+        try
+        {
+            var url = $"api/reports/daily?date={selectedDate:yyyy-MM-dd}";
+            report = await Http.GetFromJsonAsync<DisplayDailyReportDto>(url);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading report: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

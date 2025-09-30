@@ -1,0 +1,6 @@
+@SelfFinanceAPI_HostAddress = http://localhost:5056
+
+GET {{SelfFinanceAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
