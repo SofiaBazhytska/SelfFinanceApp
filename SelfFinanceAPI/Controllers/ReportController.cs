@@ -3,9 +3,11 @@ using SelfFinance.Core.Services;
 using SelfFinanceAPI.Mappers;
 using SelfFinance.Shared.Dtos.ReportDtos;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SelfFinanceAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/reports")]
     public class ReportController : Controller
