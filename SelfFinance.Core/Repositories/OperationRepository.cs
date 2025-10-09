@@ -12,33 +12,34 @@ namespace SelfFinance.Core.Repositories
             _context = context;
         }
 
-        public async Task<List<Operation>> GetAllOperationsAsync()
+        public async Task<List<Operation>> GetAllOperationsForUserAsync(int userId)
         {
             return await _context.Operations
                 .Include(c=>c.Category)
+                .Where(u=>u.UserId== userId)
                 .ToListAsync();
         }
 
-        public async Task<Operation?> GetOperationAsync(int id)
+        public async Task<Operation?> GetOperationForUserAsync(int id, int userId)
         {
             return await _context.Operations
                 .Include(o => o.Category)
-                .FirstOrDefaultAsync(o => o.Id == id);
+                .FirstOrDefaultAsync(o => o.Id == id && o.UserId == userId);
         }
 
-        public async Task<List<Operation>> GetOperationsByDateAsync(DateOnly date)
+        public async Task<List<Operation>> GetOperationsByDateAsync(DateOnly date, int userId)
         {
             return await _context.Operations
                 .Include(o => o.Category)
-                .Where(o => o.Date == date)
+                .Where(o => o.Date == date && o.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<List<Operation>> GetOperationsByPeriodAsync(DateOnly startDate, DateOnly endDate)
+        public async Task<List<Operation>> GetOperationsByPeriodAsync(DateOnly startDate, DateOnly endDate, int userId)
         {
             return await _context.Operations
                 .Include(o => o.Category)
-                .Where(o => o.Date >= startDate && o.Date <= endDate)
+                .Where(o => o.Date >= startDate && o.Date <= endDate && o.UserId == userId)
                 .ToListAsync();
         }
 
@@ -47,7 +48,7 @@ namespace SelfFinance.Core.Repositories
             _context.Operations.Add(operation);
             await _context.SaveChangesAsync();
 
-            return await GetOperationAsync(operation.Id);
+            return operation;
         }
 
         public async Task<Operation?> UpdateOperationAsync(Operation operation)

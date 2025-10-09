@@ -12,9 +12,9 @@ namespace SelfFinance.Core.Services
             _operationRepository = operationRepository;
         }
 
-        public async Task<DailyReport> GetDailyReportAsync(DateOnly date)
+        public async Task<DailyReport> GetDailyReportAsync(DateOnly date, int userId)
         {
-            var operations = await _operationRepository.GetOperationsByDateAsync(date);
+            var operations = await _operationRepository.GetOperationsByDateAsync(date, userId);
 
             return new DailyReport
             {
@@ -25,9 +25,9 @@ namespace SelfFinance.Core.Services
             };
         }
 
-        public async Task<PeriodReport> GetPeriodReportAsync(DateOnly startDate, DateOnly endDate)
+        public async Task<PeriodReport> GetPeriodReportAsync(DateOnly startDate, DateOnly endDate, int userId)
         {
-            var operations = await _operationRepository.GetOperationsByPeriodAsync(startDate, endDate);
+            var operations = await _operationRepository.GetOperationsByPeriodAsync(startDate, endDate, userId);
 
             return new PeriodReport
             {
