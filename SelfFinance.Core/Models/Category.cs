@@ -11,6 +11,7 @@ namespace SelfFinance.Core.Models
         public string Name { get; set; }
         public bool IsIncome {  get; set; }
         public ICollection<Operation> Operations { get; set; }
-
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

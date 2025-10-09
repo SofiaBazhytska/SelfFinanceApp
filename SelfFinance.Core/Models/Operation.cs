@@ -15,5 +15,7 @@ namespace SelfFinance.Core.Models
         public Category Category { get; set; }
         public DateOnly Date {  get; set; }
         public string? Description { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

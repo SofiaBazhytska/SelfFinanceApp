@@ -13,14 +13,14 @@ namespace SelfFinance.Core.Services
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(int userId)
         {
-            return await _categoryRepository.GetAllCategoriesAsync();
+            return await _categoryRepository.GetAllCategoriesForUserAsync(userId);
         }
 
-        public async Task<Category?> GetCategoryAsync(int id)
+        public async Task<Category?> GetCategoryAsync(int id, int userId)
         {
-            return await _categoryRepository.GetCategoryAsync(id);
+            return await _categoryRepository.GetCategoryAsync(id, userId);
         }
 
         public async Task<Category> CreateCategoryAsync(Category category)

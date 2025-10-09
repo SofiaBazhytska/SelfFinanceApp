@@ -12,16 +12,18 @@ namespace SelfFinance.Core.Repositories
             _context = context;
         }
 
-        public async Task<List<Category>> GetAllCategoriesAsync()
+        public async Task<List<Category>> GetAllCategoriesForUserAsync(int userId)
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories
+                         .Where(c => c.UserId == userId)
+                         .ToListAsync();
         }
 
-        public async Task<Category?> GetCategoryAsync(int id)
+        public async Task<Category?> GetCategoryAsync(int id, int userId)
         {
             return await _context.Categories
                 .Include(c=>c.Operations)
-                .FirstOrDefaultAsync(c => c.CategoryId == id);
+                .FirstOrDefaultAsync(c => c.CategoryId == id && c.UserId == userId);
         }
 
         public async Task DeleteCategoryAsync(Category category)

@@ -5,6 +5,7 @@ using SelfFinance.Core.Services;
 using SelfFinance.Core.Exceptions;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace SelfFinanceAPI.Controllers
 {
@@ -20,10 +21,20 @@ namespace SelfFinanceAPI.Controllers
             _categoryService = categoryService;
         }
 
+        private int GetUserIdFromToken()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+                throw new Exception("Invalid user ID in token");
+
+            return userId;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
+            var userId = GetUserIdFromToken();
+            var categories = await _categoryService.GetAllCategoriesAsync(userId);
             var categoryDtos = categories.Select(c => c.ToDisplayCategoryDto());
             return Ok(categoryDtos);
         }
@@ -31,7 +42,8 @@ namespace SelfFinanceAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory(int id)
         {
-            var category = await _categoryService.GetCategoryAsync(id)
+            var userId = GetUserIdFromToken();
+            var category = await _categoryService.GetCategoryAsync(id, userId)
                 ?? throw new NotFoundException($"Category with id {id} not found.");
 
             return Ok(category.ToDisplayCategoryDto());
@@ -43,7 +55,12 @@ namespace SelfFinanceAPI.Controllers
             if (!ModelState.IsValid)
                 throw new ValidationException("Invalid category data.");
 
+            var userId = GetUserIdFromToken();
+
             var categoryModel = dto.ToCategoryFromCreateCategoryDto();
+
+            categoryModel.UserId = userId;
+
             var createdCategory = await _categoryService.CreateCategoryAsync(categoryModel);
             var categoryDto = createdCategory.ToDisplayCategoryDto();
 
@@ -56,7 +73,8 @@ namespace SelfFinanceAPI.Controllers
             if (!ModelState.IsValid)
                 throw new ValidationException("Invalid update data.");
 
-            var category = await _categoryService.GetCategoryAsync(id)
+            var userId = GetUserIdFromToken();
+            var category = await _categoryService.GetCategoryAsync(id, userId)
                 ?? throw new NotFoundException($"Category with id {id} not found.");
 
             category.Name = dto.Name;
@@ -70,7 +88,8 @@ namespace SelfFinanceAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _categoryService.GetCategoryAsync(id)
+            var userId = GetUserIdFromToken();
+            var category = await _categoryService.GetCategoryAsync(id, userId)
                 ?? throw new NotFoundException($"Category with id {id} not found.");
 
             await _categoryService.DeleteCategoryAsync(category);

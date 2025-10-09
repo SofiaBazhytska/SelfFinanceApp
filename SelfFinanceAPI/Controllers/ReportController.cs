@@ -4,6 +4,7 @@ using SelfFinanceAPI.Mappers;
 using SelfFinance.Shared.Dtos.ReportDtos;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace SelfFinanceAPI.Controllers
 {
@@ -19,13 +20,23 @@ namespace SelfFinanceAPI.Controllers
             _reportService = reportService;
         }
 
+        private int GetUserIdFromToken()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+                throw new Exception("Invalid user ID in token");
+
+            return userId;
+        }
+
         [HttpGet("daily")]
         public async Task<IActionResult> GetDailyReport([FromQuery] DateOnly date)
         {
             if (date == default)
                 throw new ValidationException("Date is required for the daily report.");
 
-            var data = await _reportService.GetDailyReportAsync(date);
+            var userId = GetUserIdFromToken();
+            var data = await _reportService.GetDailyReportAsync(date, userId);
 
             var reportDto = new DisplayDailyReportDto
             {
@@ -47,7 +58,8 @@ namespace SelfFinanceAPI.Controllers
             if (startDate > endDate)
                 throw new ValidationException("Start date cannot be later than end date.");
 
-            var data = await _reportService.GetPeriodReportAsync(startDate, endDate);
+            var userId = GetUserIdFromToken();
+            var data = await _reportService.GetPeriodReportAsync(startDate, endDate, userId);
 
             var reportDto = new DisplayPeriodReportDto
             {

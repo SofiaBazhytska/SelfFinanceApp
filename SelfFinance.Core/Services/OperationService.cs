@@ -18,32 +18,32 @@ namespace SelfFinance.Core.Services
             _category = category;
         }
 
-        public async Task<IEnumerable<Operation>> GetAllOperationsAsync()
+        public async Task<IEnumerable<Operation>> GetAllOperationsAsync(int userId)
         {
-            return await _operation.GetAllOperationsAsync();
+            return await _operation.GetAllOperationsForUserAsync(userId);
         }
 
-        public async Task<Operation> GetOperationAsync(int id)
+        public async Task<Operation> GetOperationAsync(int id, int userId)
         {
-            var operation = await _operation.GetOperationAsync(id);
+            var operation = await _operation.GetOperationForUserAsync(id, userId);
             if (operation == null)
                 throw new NotFoundException($"Operation with id {id} not found.");
 
             return operation;
         }
 
-        public async Task<Operation> CreateOperationAsync(Operation operation)
+        public async Task<Operation> CreateOperationAsync(Operation operation, int userId)
         {
-            var category = await _category.GetCategoryAsync(operation.CategoryId);
+            var category = await _category.GetCategoryAsync(operation.CategoryId, userId);
             if (category == null)
                 throw new ValidationException($"Category with id {operation.CategoryId} does not exist.");
 
             return await _operation.CreateOperationAsync(operation);
         }
 
-        public async Task<Operation?> UpdateOperationAsync(Operation operation)
+        public async Task<Operation?> UpdateOperationAsync(Operation operation, int userId)
         {
-            var category = await _category.GetCategoryAsync(operation.CategoryId);
+            var category = await _category.GetCategoryAsync(operation.CategoryId, userId);
             if (category == null)
                 throw new ValidationException($"Category with id {operation.CategoryId} does not exist.");
 
